@@ -3,57 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Word Clone - Ubaidullah Word</title>
-    <!-- Font Awesome Icons ke liye link -->
+    <title>Advance Document Editor - Ubaidullah Word</title>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cloudflare.com">
+    <!-- html2pdf Library -->
+    <script src="https://cloudflare.com"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f3f2f1; display: flex; flex-direction: column; height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background-color: #f3f2f1; display: flex; flex-direction: column; height: 100vh; color: #323130; }
         
-        /* Ribbon & Top Bar */
-        .top-bar { background-color: #107c41; color: white; padding: 5px 15px; font-size: 14px; font-weight: 600; }
-        .toolbar { background-color: #fff; border-bottom: 1px solid #e1dfdd; padding: 8px 15px; display: flex; gap: 10px; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        /* Dark Mode Theme */
+        body.dark-mode { background-color: #11100f; color: #f3f2f1; }
+        body.dark-mode .top-bar { background-color: #0f6a39; }
+        body.dark-mode .toolbar { background-color: #252423; border-bottom-color: #3b3a39; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        body.dark-mode button, body.dark-mode select, body.dark-mode label { color: #f3f2f1; }
+        body.dark-mode button:hover, body.dark-mode label:hover { background-color: #3b3a39; }
+        body.dark-mode select { background-color: #252423; border-color: #484644; }
+        body.dark-mode .workspace { background-color: #1b1a19; }
+        body.dark-mode .document-page { background: #292827; color: #ffffff; border-color: #3b3a39; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+
+        /* Top Header Bar */
+        .top-bar { background-color: #107c41; color: white; padding: 8px 20px; font-size: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .top-bar .title-section { display: flex; align-items: center; gap: 10px; }
         
-        /* Toolbar Buttons */
-        .btn-group { display: flex; border-right: 1px solid #e1dfdd; padding-right: 10px; gap: 5px; align-items: center; }
-        button, select { background: none; border: 1px solid transparent; padding: 6px 10px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #323130; font-size: 14px; }
-        button:hover { background-color: #f3f2f1; }
-        button.active { background-color: #edebe9; border-color: #a19f9d; }
-        select { border: 1px solid #d2d0ce; outline: none; background: white; }
+        /* Modern Toolbar Ribbon */
+        .toolbar { background-color: #ffffff; border-bottom: 1px solid #e1dfdd; padding: 10px 20px; display: flex; gap: 8px; flex-wrap: wrap; box-shadow: 0 2px 6px rgba(0,0,0,0.04); align-items: center; }
+        .btn-group { display: flex; border-right: 1px solid #edebe9; padding-right: 8px; gap: 4px; align-items: center; }
+        body.dark-mode .btn-group { border-right-color: #3b3a39; }
         
-        /* Main Workspace & Page */
-        .workspace { flex: 1; padding: 30px; overflow-y: auto; display: flex; justify-content: center; background-color: #eaeaea; }
-        .document-page { background: white; width: 100%; max-width: 800px; min-height: 1056px; padding: 90px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #d2d0ce; outline: none; font-size: 16px; line-height: 1.5; color: #000; overflow-wrap: break-word; }
+        /* Inputs & Buttons Styling */
+        button, select, .file-label { background: none; border: 1px solid transparent; padding: 6px 12px; cursor: pointer; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; color: #323130; font-size: 14px; font-weight: 500; }
+        button:hover, .file-label:hover { background-color: #f3f2f1; }
+        select { border: 1px solid #d2d0ce; outline: none; background: white; padding: 5px 10px; }
+        .color-wrapper { display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+        .color-wrapper:hover { background-color: #f3f2f1; }
+        body.dark-mode .color-wrapper:hover { background-color: #3b3a39; }
+        .color-picker { padding: 0; width: 24px; height: 24px; border: none; cursor: pointer; background: transparent; }
+        .file-input { display: none; }
+
+        /* Document Workspace */
+        .workspace { flex: 1; padding: 40px 20px; overflow-y: auto; display: flex; justify-content: center; background-color: #f3f2f1; }
+        .document-page { background: white; width: 100%; max-width: 850px; min-height: 1100px; padding: 80px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #d2d0ce; outline: none; font-size: 16px; line-height: 1.6; color: #323130; overflow-wrap: break-word; }
         
+        /* Media Elements inside Document */
+        .document-page img, .document-page video { max-width: 100%; height: auto; border-radius: 8px; margin: 12px 0; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        
+        /* Action Buttons styling */
+        .dark-btn { background: rgba(255,255,255,0.15); color: white; border-radius: 20px; padding: 5px 14px; font-size: 13px; border: 1px solid rgba(255,255,255,0.2); }
+        .dark-btn:hover { background: rgba(255,255,255,0.25); }
+        .pdf-btn { background-color: #a80000; color: white !important; font-weight: 600; }
+        .pdf-btn:hover { background-color: #820000; }
+        .media-btn { background-color: #0078d4; color: white !important; }
+        .media-btn:hover { background-color: #005a9e; }
+
         /* Status Bar */
-        .status-bar { background-color: #107c41; color: white; padding: 4px 15px; font-size: 12px; display: flex; justify-content: space-between; }
+        .status-bar { background-color: #107c41; color: white; padding: 6px 20px; font-size: 13px; display: flex; justify-content: space-between; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar"><i class="fa-regular fa-file-word"></i> Document1 - Ubaidullah Word</div>
+    <!-- Header Top Bar -->
+    <div class="top-bar">
+        <div class="title-section">
+            <i class="fa-solid fa-file-invoice" style="font-size: 18px;"></i>
+            <span>Ubaidullah Pro Editor</span>
+        </div>
+        <button class="dark-btn" onclick="toggleDarkMode()"><i class="fa-solid fa-moon"></i> Dark Mode</button>
+    </div>
 
-    <!-- Toolbar Ribbon -->
+    <!-- Smart Toolbar Ribbon -->
     <div class="toolbar">
-        <!-- Font Styles -->
+        <!-- Typography -->
         <div class="btn-group">
             <select id="fontName" onchange="format('fontName', this.value)">
-                <option value="Calibri">Calibri</option>
+                <option value="Segoe UI">Segoe UI</option>
                 <option value="Arial">Arial</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Courier New">Courier New</option>
             </select>
             <select id="fontSize" onchange="format('fontSize', this.value)">
-                <option value="3">12</option>
-                <option value="4">14</option>
-                <option value="5">18</option>
-                <option value="6">24</option>
-                <option value="7">36</option>
+                <option value="3">12pt</option>
+                <option value="4">14pt</option>
+                <option value="5">18pt</option>
+                <option value="6">24pt</option>
+                <option value="7">36pt</option>
             </select>
         </div>
 
-        <!-- Text Styling -->
+        <!-- Text Mechanics -->
         <div class="btn-group">
             <button onclick="format('bold')" title="Bold"><i class="fa-solid fa-bold"></i></button>
             <button onclick="format('italic')" title="Italic"><i class="fa-solid fa-italic"></i></button>
@@ -61,55 +98,81 @@
             <button onclick="format('strikeThrough')" title="Strikethrough"><i class="fa-solid fa-strikethrough"></i></button>
         </div>
 
-        <!-- Alignment -->
+        <!-- Color Architecture -->
         <div class="btn-group">
-            <button onclick="format('justifyLeft')" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
-            <button onclick="format('justifyCenter')" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
-            <button onclick="format('justifyRight')" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+            <div class="color-wrapper" title="Text Color">
+                <i class="fa-solid fa-palette" style="font-size: 14px;"></i>
+                <input type="color" class="color-picker" onchange="format('foreColor', this.value)">
+            </div>
+        </div>
+
+        <!-- Alignment Systems -->
+        <div class="btn-group">
+            <button onclick="format('justifyLeft')" title="Left"><i class="fa-solid fa-align-left"></i></button>
+            <button onclick="format('justifyCenter')" title="Center"><i class="fa-solid fa-align-center"></i></button>
+            <button onclick="format('justifyRight')" title="Right"><i class="fa-solid fa-align-right"></i></button>
             <button onclick="format('justifyFull')" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
         </div>
 
-        <!-- Extras -->
+        <!-- Lists Framework -->
         <div class="btn-group">
-            <button onclick="format('insertUnorderedList')" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
-            <button onclick="format('insertOrderedList')" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
-            <button onclick="clearText()" title="Clear Text" style="color: #a80000;"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="format('insertUnorderedList')" title="Bullets"><i class="fa-solid fa-list-ul"></i></button>
+            <button onclick="format('insertOrderedList')" title="Numbers"><i class="fa-solid fa-list-ol"></i></button>
+        </div>
+
+        <!-- Media Dynamic Uploads -->
+        <div class="btn-group">
+            <label for="imageUpload" class="file-label media-btn" title="Insert Photo">
+                <i class="fa-solid fa-image"></i> Photo
+            </label>
+            <input type="file" id="imageUpload" class="file-input" accept="image/*" onchange="insertImage(event)">
+
+            <label for="videoUpload" class="file-label media-btn" style="background-color: #8764b8;" title="Insert Video">
+                <i class="fa-solid fa-video"></i> Video
+            </label>
+            <input type="file" id="videoUpload" class="file-input" accept="video/*" onchange="insertVideo(event)">
+        </div>
+
+        <!-- Export Elements -->
+        <div class="btn-group" style="border: none;">
+            <button class="pdf-btn" onclick="downloadPDF()" title="Export PDF"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+            <button onclick="clearText()" title="Reset Canvas" style="color: #a80000; margin-left: 8px;"><i class="fa-solid fa-trash-can"></i></button>
         </div>
     </div>
 
-    <!-- Document Workspace -->
+    <!-- Professional Workspace Layout -->
     <div class="workspace">
         <div class="document-page" id="editor" contenteditable="true">
-            Yahan apna text likhna shuru karein...
+            Apna behtareen document yahan design karein. Aap upar diye gaye buttons se images aur videos bhi add kar sakte hain...
         </div>
     </div>
 
-    <!-- Status Bar -->
+    <!-- Data Engine Status Bar -->
     <div class="status-bar">
-        <div>Page 1 of 1</div>
-        <div>Ubaidullah Word Clone</div>
+        <div>System Online | Ready</div>
+        <div>Ubaidullah Creator Studio</div>
     </div>
 
     <script>
-        // Formatting commands function
+        // Core Rich Text Engine
         function format(command, value = null) {
             document.execCommand(command, false, value);
             document.getElementById('editor').focus();
         }
 
-        // Editor clear karne ke liye
-        function clearText() {
-            if(confirm("Kya aap poora document saaf karna chahte hain?")) {
-                document.getElementById('editor').innerHTML = "";
+        // Photo Attachment Handler
+        function insertImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgHtml = `<img src="${e.target.result}" alt="Uploaded Image" contenteditable="false">`;
+                    document.execCommand('insertHTML', false, imgHtml);
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // Default focus editor par laane ke liye
-        window.onload = () => {
-            document.getElementById('editor').focus();
-        };
-    </script>
-</body>
-</html>
-
-
+        // Video Attachment Handler
+        function insertVideo(event) {
+            const file = event.target.files[0];
