@@ -1,307 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ubaidullah Word 2016</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&family=Noto+Nastaliq+Urdu&display=swap');
-
-  :root{
-    --bg:#e6e6e6; --ribbon:#2b5797; --panel:#ffffff; --text:#222;
-  }
-  body.dark{
-    --bg:#1e1e1e; --ribbon:#1a365d; --panel:#2d2d2d; --text:#eee;
-  }
-
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    height:100vh;
-    overflow:hidden;
-  }
-
-  /* TITLE BAR */
-  .title-bar{
-    background:var(--ribbon);
-    color:white;
-    height:32px;
-    display:flex;
-    align-items:center;
-    padding:0 10px;
-    font-size:12px;
-    justify-content:space-between;
-  }
-
-  /* RIBBON */
-  .ribbon{background:var(--ribbon);color:white;padding:5px 10px;}
-  .ribbon-tabs{display:flex;gap:2px;font-size:13px;}
-  .ribbon-tabs div{
-    padding:6px 12px;cursor:pointer;border-radius:3px 3px 0 0;color:white
-  }
-  .ribbon-tabs div.active{
-    background:var(--panel);color:var(--text);font-weight:600
-  }
-  
-  .ribbon-content{
-    background:var(--panel);color:var(--text);padding:8px;display:flex;gap:15px;
-    border-bottom:1px solid #ccc;min-height:95px
-  }
-  .ribbon-group{border-right:1px solid #ddd;padding-right:15px}
-  .ribbon-group-title{font-size:11px;color:#666;text-align:center;margin-top:5px}
-  .ribbon-btn{
-    padding:5px 8px;background:#f3f3f3;border:1px solid #ccc;
-    border-radius:3px;cursor:pointer;font-size:12px;margin:2px;display:inline-block
-  }
-  body.dark .ribbon-btn{background:#3a3a3a;border-color:#555;color:#eee}
-  .ribbon-btn:hover{background:#2b5797;color:white}
-
-  .shapes-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;width:220px}
-  .shape-mini{
-    width:32px;height:32px;border:1px solid #999;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;font-size:16px
-  }
-  .color-picker{display:flex;gap:3px;flex-wrap:wrap;width:140px}
-  .color-dot{width:18px;height:18px;border:1px solid #ccc;cursor:pointer;border-radius:2px}
-
-  /* MAIN */
-  .main{display:flex;height:calc(100vh - 155px);background:var(--bg)}
-  .sidebar-left{width:180px;background:var(--panel);border-right:1px solid #ccc;padding:10px}
-  .page-area{flex:1;display:flex;flex-direction:column;gap:20px;align-items:center;padding:20px;overflow:auto}
-
-  .page{
-    background:white;padding:60px;
-    box-shadow:0 0 10px rgba(0,0,0,0.2);position:relative;
-    transform-origin: top center;transition: transform 0.2s
-  }
-  .page.a4{width:210mm;min-height:297mm}
-  .editor{outline:none;min-height:100%;font-size:11pt;line-height:1.6}
-
-  .shape{position:absolute;border:2px solid #2b5797;background:rgba(43,87,151,0.1);cursor:move;display:flex;align-items:center;justify-content:center}
-  .shape.selected{border:2px dashed #0078d4}
-
-  .watermark{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);
-    font-size:60px;color:rgba(0,0,0,0.1);pointer-events:none;z-index:0
-  }
-
-  .status-bar{
-    background:var(--ribbon);color:white;height:25px;display:flex;
-    align-items:center;padding:0 10px;font-size:12px;justify-content:space-between
-  }
-  select,input{padding:4px;border-radius:3px;border:1px solid #ccc}
-  body.dark select,body.dark input{background:#3a3a3a;color:#eee;border-color:#555}
-  .urdu{font-family:'Noto Nastaliq Urdu';font-size:16pt;direction:rtl;text-align:right}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Word Clone - Ubaidullah Word</title>
+    <!-- Font Awesome Icons ke liye link -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f3f2f1; display: flex; flex-direction: column; height: 100vh; }
+        
+        /* Ribbon & Top Bar */
+        .top-bar { background-color: #107c41; color: white; padding: 5px 15px; font-size: 14px; font-weight: 600; }
+        .toolbar { background-color: #fff; border-bottom: 1px solid #e1dfdd; padding: 8px 15px; display: flex; gap: 10px; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        
+        /* Toolbar Buttons */
+        .btn-group { display: flex; border-right: 1px solid #e1dfdd; padding-right: 10px; gap: 5px; align-items: center; }
+        button, select { background: none; border: 1px solid transparent; padding: 6px 10px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #323130; font-size: 14px; }
+        button:hover { background-color: #f3f2f1; }
+        button.active { background-color: #edebe9; border-color: #a19f9d; }
+        select { border: 1px solid #d2d0ce; outline: none; background: white; }
+        
+        /* Main Workspace & Page */
+        .workspace { flex: 1; padding: 30px; overflow-y: auto; display: flex; justify-content: center; background-color: #eaeaea; }
+        .document-page { background: white; width: 100%; max-width: 800px; min-height: 1056px; padding: 90px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #d2d0ce; outline: none; font-size: 16px; line-height: 1.5; color: #000; overflow-wrap: break-word; }
+        
+        /* Status Bar */
+        .status-bar { background-color: #107c41; color: white; padding: 4px 15px; font-size: 12px; display: flex; justify-content: space-between; }
+    </style>
 </head>
 <body>
 
-<!-- TITLE BAR -->
-<div class="title-bar">
-  <div>📄 Document1 - Ubaidullah Word</div>
-  <button onclick="toggleTheme()" style="background:white;color:#2b5797;border:none;padding:3px 10px;border-radius:3px;cursor:pointer">🌙 Dark</button>
-</div>
+    <!-- Top Bar -->
+    <div class="top-bar"><i class="fa-regular fa-file-word"></i> Document1 - Ubaidullah Word</div>
 
-<!-- RIBBON TABS -->
-<div class="ribbon">
-  <div class="ribbon-tabs">
-    <div>File</div>
-    <div class="active" onclick="showTab('home')">Home</div>
-    <div onclick="showTab('insert')">Insert</div>
-    <div onclick="showTab('design')">Design</div>
-    <div onclick="showTab('view')">View</div>
-  </div>
-</div>
+    <!-- Toolbar Ribbon -->
+    <div class="toolbar">
+        <!-- Font Styles -->
+        <div class="btn-group">
+            <select id="fontName" onchange="format('fontName', this.value)">
+                <option value="Calibri">Calibri</option>
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+            <select id="fontSize" onchange="format('fontSize', this.value)">
+                <option value="3">12</option>
+                <option value="4">14</option>
+                <option value="5">18</option>
+                <option value="6">24</option>
+                <option value="7">36</option>
+            </select>
+        </div>
 
-<!-- HOME TAB -->
-<div class="ribbon-content" id="homeTab">
-  <div class="ribbon-group">
-    <button class="ribbon-btn" onclick="format('cut')">✂️ Cut</button>
-    <button class="ribbon-btn" onclick="format('copy')">📋 Copy</button>
-    <button class="ribbon-btn" onclick="format('paste')">📄 Paste</button>
-    <div class="ribbon-group-title">Clipboard</div>
-  </div>
-  <div class="ribbon-group">
-    <select onchange="format('fontName',this.value)">
-      <option>Calibri</option><option>Arial</option><option>Times New Roman</option>
-    </select>
-    <select onchange="format('fontSize',this.value)">
-      <option>11</option><option>12</option><option>14</option><option>16</option><option>18</option>
-    </select>
-    <button class="ribbon-btn" onclick="format('bold')"><b>B</b></button>
-    <button class="ribbon-btn" onclick="format('italic')"><i>I</i></button>
-    <button class="ribbon-btn" onclick="format('underline')"><u>U</u></button>
-    <button class="ribbon-btn" onclick="format('subscript')">x₂</button>
-    <button class="ribbon-btn" onclick="format('superscript')">x²</button>
-    <input type="color" onchange="format('foreColor',this.value)" title="Font Color">
-    <div class="ribbon-group-title">Font</div>
-  </div>
-  <div class="ribbon-group">
-    <button class="ribbon-btn" onclick="format('justifyLeft')">◀</button>
-    <button class="ribbon-btn" onclick="format('justifyCenter')">■</button>
-    <button class="ribbon-btn" onclick="format('justifyRight')">▶</button>
-    <button class="ribbon-btn" onclick="format('insertUnorderedList')">•</button>
-    <div class="ribbon-group-title">Paragraph</div>
-  </div>
-  <div class="ribbon-group">
-    <input type="text" id="findText" placeholder="Find">
-    <button class="ribbon-btn" onclick="findText()">Find</button>
-    <button class="ribbon-btn" onclick="replaceText()">Replace</button>
-    <div class="ribbon-group-title">Editing</div>
-  </div>
-</div>
+        <!-- Text Styling -->
+        <div class="btn-group">
+            <button onclick="format('bold')" title="Bold"><i class="fa-solid fa-bold"></i></button>
+            <button onclick="format('italic')" title="Italic"><i class="fa-solid fa-italic"></i></button>
+            <button onclick="format('underline')" title="Underline"><i class="fa-solid fa-underline"></i></button>
+            <button onclick="format('strikeThrough')" title="Strikethrough"><i class="fa-solid fa-strikethrough"></i></button>
+        </div>
 
-<!-- INSERT TAB -->
-<div class="ribbon-content" id="insertTab" style="display:none">
-  <div class="ribbon-group">
-    <button class="ribbon-btn" onclick="addCoverPage()">📄 Cover Page</button>
-    <button class="ribbon-btn" onclick="addPageBreak()">📃 Page Break</button>
-    <div class="ribbon-group-title">Pages</div>
-  </div>
-  <div class="ribbon-group">
-    <div class="shapes-grid">
-      <!-- 20 SHAPES -->
-      <div class="shape-mini" onclick="addShape('rect')">⬜</div>
-      <div class="shape-mini" onclick="addShape('circle')">⭕</div>
-      <div class="shape-mini" onclick="addShape('triangle')">🔺</div>
-      <div class="shape-mini" onclick="addShape('diamond')">💎</div>
-      <div class="shape-mini" onclick="addShape('arrow')">➡️</div>
-      <div class="shape-mini" onclick="addShape('line')">➖</div>
-      <div class="shape-mini" onclick="addShape('star')">⭐</div>
-      <div class="shape-mini" onclick="addShape('pentagon')">⬟</div>
-      <div class="shape-mini" onclick="addShape('hexagon')">⬡</div>
-      <div class="shape-mini" onclick="addShape('octagon')">⭕</div>
-      <div class="shape-mini" onclick="addShape('heart')">❤️</div>
-      <div class="shape-mini" onclick="addShape('cloud')">☁️</div>
-      <div class="shape-mini" onclick="addShape('speech')">💬</div>
-      <div class="shape-mini" onclick="addShape('cross')">✝️</div>
-      <div class="shape-mini" onclick="addShape('plus')">➕</div>
-      <div class="shape-mini" onclick="addShape('minus')">➖</div>
-      <div class="shape-mini" onclick="addShape('checkmark')">✅</div>
-      <div class="shape-mini" onclick="addShape('x')">❌</div>
-      <div class="shape-mini" onclick="addShape('textbox')">📝</div>
-      <div class="shape-mini" onclick="addShape('ribbon')">🎀</div>
+        <!-- Alignment -->
+        <div class="btn-group">
+            <button onclick="format('justifyLeft')" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+            <button onclick="format('justifyCenter')" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+            <button onclick="format('justifyRight')" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+            <button onclick="format('justifyFull')" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
+        </div>
+
+        <!-- Extras -->
+        <div class="btn-group">
+            <button onclick="format('insertUnorderedList')" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
+            <button onclick="format('insertOrderedList')" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
+            <button onclick="clearText()" title="Clear Text" style="color: #a80000;"><i class="fa-solid fa-trash"></i></button>
+        </div>
     </div>
-    <div class="ribbon-group-title">Shapes 20+</div>
-  </div>
-  <div class="ribbon-group">
-    <button class="ribbon-btn" onclick="addImage()">🖼️ Picture</button>
-    <button class="ribbon-btn" onclick="addTable()">📊 Table</button>
-    <button class="ribbon-btn" onclick="addLink()">🔗 Link</button>
-    <button class="ribbon-btn" onclick="addEquation()">ƒ(x) Equation</button>
-    <div class="ribbon-group-title">Illustrations</div>
-  </div>
-</div>
 
-<!-- DESIGN TAB -->
-<div class="ribbon-content" id="designTab" style="display:none">
-  <div class="ribbon-group">
-    <div class="color-picker">
-      <div class="color-dot" style="background:white" onclick="changePageBg('white')"></div>
-      <div class="color-dot" style="background:#fff9c4" onclick="changePageBg('#fff9c4')"></div>
-      <div class="color-dot" style="background:#c8e6c9" onclick="changePageBg('#c8e6c9')"></div>
-      <div class="color-dot" style="background:#bbdefb" onclick="changePageBg('#bbdefb')"></div>
-      <div class="color-dot" style="background:#ffcdd2" onclick="changePageBg('#ffcdd2')"></div>
+    <!-- Document Workspace -->
+    <div class="workspace">
+        <div class="document-page" id="editor" contenteditable="true">
+            Yahan apna text likhna shuru karein...
+        </div>
     </div>
-    <div class="ribbon-group-title">Page Color</div>
-  </div>
-  <div class="ribbon-group">
-    <input type="text" id="watermarkText" placeholder="Watermark">
-    <button class="ribbon-btn" onclick="addWatermark()">Add Watermark</button>
-    <div class="ribbon-group-title">Watermark</div>
-  </div>
-  <div class="ribbon-group">
-    <div class="color-picker">
-      <div class="color-dot" style="background:#2b5797" onclick="changeTheme('#2b5797')"></div>
-      <div class="color-dot" style="background:#00ff88" onclick="changeTheme('#00ff88')"></div>
-      <div class="color-dot" style="background:#ff0000" onclick="changeTheme('#ff0000')"></div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div>Page 1 of 1</div>
+        <div>Ubaidullah Word Clone</div>
     </div>
-    <div class="ribbon-group-title">Theme Color</div>
-  </div>
-</div>
 
-<!-- VIEW TAB -->
-<div class="ribbon-content" id="viewTab" style="display:none">
-  <div class="ribbon-group">
-    <button class="ribbon-btn" onclick="zoom(1.1)">🔍 +</button>
-    <button class="ribbon-btn" onclick="zoom(0.9)">🔍 -</button>
-    <select id="pageSize" onchange="changePageSize()">
-      <option value="a4">A4</option><option value="letter">Letter</option>
-    </select>
-    <div class="ribbon-group-title">Zoom</div>
-  </div>
-</div>
+    <script>
+        // Formatting commands function
+        function format(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('editor').focus();
+        }
 
-<!-- MAIN -->
-<div class="main">
-  <div class="sidebar-left">
-    <h4>Pages</h4>
-    <div id="pageList"><div style="padding:5px;background:#2b5797;color:white;border-radius:3px">Page 1</div></div>
-  </div>
-  <div class="page-area" id="pagesContainer">
-    <div class="page a4"><div class="editor" contenteditable="true"></div></div>
-  </div>
-</div>
+        // Editor clear karne ke liye
+        function clearText() {
+            if(confirm("Kya aap poora document saaf karna chahte hain?")) {
+                document.getElementById('editor').innerHTML = "";
+            }
+        }
 
-<!-- STATUS BAR -->
-<div class="status-bar">
-  <div id="statusText">Page 1 of 1 | Words: 0</div>
-  <div>Ubaidullah Word</div>
-</div>
-
-<script>
-let pageCount = 1; let currentZoom = 1; let selectedShape = null; let isDark=false;
-
-function showTab(tab){
-  document.querySelectorAll('.ribbon-content').forEach(t=>t.style.display='none');
-  document.querySelectorAll('.ribbon-tabs div').forEach(t=>t.classList.remove('active'));
-  document.getElementById(tab+'Tab').style.display='flex';
-  event.target.classList.add('active');
-}
-
-function format(cmd,val=null){document.execCommand(cmd,false,val);}
-function findText(){let t=document.getElementById('findText').value; window.find(t);}
-function replaceText(){let f=prompt("Find:"); let r=prompt("Replace with:"); document.body.innerHTML=document.body.innerHTML.replaceAll(f,r);}
-
-function toggleTheme(){
-  isDark=!isDark; document.body.classList.toggle('dark');
-  event.target.innerText=isDark?'☀️ Light':'🌙 Dark';
-}
-
-// 20 SHAPES
-function addShape(type){
-  let editor=document.querySelector('.editor:focus')||document.querySelector('.editor');
-  let shape=document.createElement('div'); shape.className=`shape ${type}`;
-  shape.style.top='150px';shape.style.left='150px';shape.style.width='120px';shape.style.height='80px';
-  
-  if(type=='circle'){shape.style.borderRadius='50%';}
-  if(type=='triangle'){shape.style.width='0';shape.style.height='0';shape.style.borderLeft='60px solid transparent';shape.style.borderRight='60px solid transparent';shape.style.borderBottom='100px solid rgba(43,87,151,0.1)';shape.style.background='transparent';}
-  if(type=='heart'){shape.style.clipPath='path("M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z")';}
-  if(type=='textbox'){shape.contentEditable=true;shape.innerText='Text...';shape.style.background='white';}
-  
-  shape.onclick=(e)=>{e.stopPropagation();document.querySelectorAll('.shape').forEach(s=>s.classList.remove('selected'));shape.classList.add('selected');selectedShape=shape;}
-  shape.onmousedown=(e)=>{let sx=e.clientX-shape.getBoundingClientRect().left;let sy=e.clientY-shape.getBoundingClientRect().top;function move(x,y){shape.style.left=x-sx-editor.getBoundingClientRect().left+'px';shape.style.top=y-sy-editor.getBoundingClientRect().top+'px';}function onMove(e){move(e.pageX,e.pageY);}document.addEventListener('mousemove',onMove);shape.onmouseup=()=>document.removeEventListener('mousemove',onMove);}
-  editor.appendChild(shape);
-}
-
-function addCoverPage(){
-  let cover=`<h1 style="text-align:center;font-size:48px;margin-top:200px">Document Title</h1><p style="text-align:center;font-size:18px">By Ubaidullah</p><p style="text-align:center;margin-top:400px">${new Date().toLocaleDateString()}</p>`;
-  document.querySelector('.editor').innerHTML=cover+'<hr>'+document.querySelector('.editor').innerHTML;
-}
-function addPageBreak(){document.execCommand('insertHTML',false,'<div style="page-break-after:always"></div>');}
-function addLink(){let url=prompt("Enter URL:"); document.execCommand('createLink',false,url);}
-function addEquation(){document.execCommand('insertHTML',false,'<span style="font-family:Times">E = mc²</span>');}
-function addWatermark(){let txt=document.getElementById('watermarkText').value; document.querySelector('.page').innerHTML+=`<div class="watermark">${txt}</div>`;}
-function changePageBg(color){document.querySelectorAll('.page').forEach(p=>p.style.background=color);}
-function changeTheme(color){document.documentElement.style.setProperty('--ribbon',color);}
-function zoom(f){currentZoom*=f; if(currentZoom<0.5)currentZoom=0.5; if(currentZoom>2)currentZoom=2; document.querySelectorAll('.page').forEach(p=>p.style.transform=`scale(${currentZoom})`);}
-function changePageSize(){let s=document.getElementById('pageSize').value; document.querySelectorAll('.page').forEach(p=>p.className=`page ${s}`);}
-function addTable(){let r=prompt("Rows?","3"); let c=prompt("Cols?","3"); let t='<table style="border-collapse:collapse;width:100%">'; for(let i=0;i<r;i++){t+='<tr>'; for(let j=0;j<c;j++)t+='<td style="border:1px solid #000;padding:8px">Cell</td>'; t+='</tr>';} t+='</table>'; document.execCommand('insertHTML',false,t);}
-function addImage(){let url=prompt("Image URL:"); if(url)document.execCommand('insertImage',false,url);}
-</script>
-
+        // Default focus editor par laane ke liye
+        window.onload = () => {
+            document.getElementById('editor').focus();
+        };
+    </script>
 </body>
 </html>
+
+
